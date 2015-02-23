@@ -22,7 +22,8 @@ For now, we suggest you think of it like this: in OOP, you try to give every obj
 ### How do actors communicate?
 Actors communicate with each other just as humans do, by exchanging messages. These messages are just plain old C# classes.
 
-```csharp
+```
+//csharp
 //this is a message!
 public class SomeMessage{
 	public int SomeValue {get; set}
@@ -31,7 +32,8 @@ public class SomeMessage{
 
 We go into messages in detail in the next lesson, so don't worry about it for now. All you need to know is that you send messages by `Tell()`ing them to another actor.
 
-```csharp
+```
+//csharp
 //send a string to an actor
 someActorRef.Tell("this is a message too!");
 ```
