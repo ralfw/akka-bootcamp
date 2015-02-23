@@ -26,6 +26,8 @@ namespace WinTail
 				DoPrintInstructions ();
 
 			GetAndValidateInput ();
+
+			Self.Tell (new ContinueProcessing ());
         }
 
 
