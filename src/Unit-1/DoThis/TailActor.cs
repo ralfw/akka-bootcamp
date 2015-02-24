@@ -86,8 +86,6 @@ namespace WinTail
 		{
 			if (message is FileWrite)
 			{
-				System.Console.WriteLine ("***change detected***");
-
 //				var fw = message as FileWrite;
 //				_reporterActor.Tell (File.ReadAllText(fw.FileName));
 
