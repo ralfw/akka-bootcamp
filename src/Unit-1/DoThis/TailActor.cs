@@ -86,18 +86,18 @@ namespace WinTail
 		{
 			if (message is FileWrite)
 			{
-//				var fw = message as FileWrite;
-//				_reporterActor.Tell (File.ReadAllText(fw.FileName));
+				var fw = message as FileWrite;
+				_reporterActor.Tell (File.ReadAllText(fw.FileName));
 
 
 				// move file cursor forward
 				// pull results from cursor to end of file and write to output
 				// (tis is assuming a log file type format that is append-only)
-				var text = _fileStreamReader.ReadToEnd();
-				if (!string.IsNullOrEmpty(text))
-				{
-					_reporterActor.Tell(text);
-				}
+//				var text = _fileStreamReader.ReadToEnd();
+//				if (!string.IsNullOrEmpty(text))
+//				{
+//					_reporterActor.Tell(text);
+//				}
 
 			}
 			else if (message is FileError)
