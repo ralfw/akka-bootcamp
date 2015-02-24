@@ -9,9 +9,10 @@ namespace FlowDesignExperiment
 		{
 			var actorSys = ActorSystem.Create ("experiment");
 
-			ActorRef writer = actorSys.ActorOf(Props.Create<Actors.Writer>());
+			ActorRef writer = actorSys.ActorOf(Props.Create<Actors.Writer>(), "writer");
+			//TODO: let error message flow to reader on failure
 			var validator = actorSys.ActorOf (Props.Create(() => new Actors.Validator(writer, writer)));
-			var reader = actorSys.ActorOf (Props.Create(() => new Actors.Reader(validator)));
+			var reader = actorSys.ActorOf (Props.Create(() => new Actors.Reader(validator)), "reader");
 		
 			reader.Tell (new Actors.Messages.Start ());
 
@@ -37,6 +38,9 @@ namespace FlowDesignExperiment
 			{
 				if (message is Messages.Start)
 					Console.WriteLine("Enter text or leave blank for exit");
+
+				if (message is Messages.Error)
+					Console.WriteLine ("  Oh, no! {0}", (message as Messages.Error).Explanation);
 
 				var data = Console.ReadLine ();
 
