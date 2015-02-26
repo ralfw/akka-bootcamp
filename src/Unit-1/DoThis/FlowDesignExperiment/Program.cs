@@ -10,7 +10,7 @@ namespace FlowDesignExperiment
 			var actorSys = ActorSystem.Create ("experiment");
 
 			ActorRef writer = actorSys.ActorOf(Props.Create<Actors.Writer>(), "writer");
-			//TODO: let error message flow to reader on failure
+			//TODO: let error message flow to reader on failure (which would mean a circular flow)
 			var validator = actorSys.ActorOf (Props.Create(() => new Actors.Validator(writer, writer)));
 			var reader = actorSys.ActorOf (Props.Create(() => new Actors.Reader(validator)), "reader");
 		
@@ -54,10 +54,11 @@ namespace FlowDesignExperiment
 				Self.Tell (new Messages.Continue ());
 			}
 
+			public Reader() {}
 			public Reader(ActorRef dataRead) {
 				this.DataRead = dataRead;
 			}
-			private ActorRef DataRead;
+			public ActorRef DataRead;
 		}
 
 
