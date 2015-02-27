@@ -15,6 +15,7 @@ namespace WinTail
 			_consoleWriterActor = consoleWriterActor;
 		}
 
+
 		protected override void OnReceive(object message)
 		{
 			var msg = message as string;
@@ -35,7 +36,7 @@ namespace WinTail
 					_consoleWriterActor.Tell(new Messages.InputSuccess(string.Format("Starting processing for {0}", msg)));
 
 					// start coordinator
-					Context.ActorSelection("/user/tailCoordinatorActor").Tell(new TailCoordinatorActor.StartTail(msg, _consoleWriterActor));
+					Context.ActorSelection("akka://MyActorSystem/user/tailCoordinatorActor").Tell(new TailCoordinatorActor.StartTail(msg, _consoleWriterActor));
 				}
 				else
 				{
