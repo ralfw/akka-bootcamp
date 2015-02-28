@@ -17,12 +17,29 @@ namespace WinTail
 
         protected override void OnReceive(object message)
         {
+<<<<<<< HEAD
 			if (message.Equals (StartCommand))
 				DoPrintInstructions ();
 
 			GetAndValidateInput ();
 
 			Self.Tell (new ContinueProcessing ());
+=======
+            var read = Console.ReadLine();
+            if (!string.IsNullOrEmpty(read) && String.Equals(read, ExitCommand, StringComparison.OrdinalIgnoreCase))
+            {
+                // shut down the system (acquire handle to system via
+                // this actors context)
+                Context.System.Shutdown();
+                return;
+            }
+
+            // send input to the console writer to process and print
+            // YOU NEED TO FILL IN HERE
+
+            // continue reading messages from the console
+            // YOU NEED TO FILL IN HERE
+>>>>>>> master
         }
 
 
