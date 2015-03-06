@@ -8,7 +8,7 @@ using System.Windows.Forms;
 
 namespace ChartApp.Actors
 {
-    public class ChartingActor : ReceiveActor
+    public class ChartingActor : ReceiveActor, WithUnboundedStash
     {
         /// <summary>
         /// Maximum number of points we will allow in a series
@@ -76,7 +76,7 @@ namespace ChartApp.Actors
 
         private void Charting()
         {
-            Receive<InitializeChart>(ic => HandleInitialize(ic));
+            Receive<ChartingActor.InitializeChart>(ic => HandleInitialize(ic));
             Receive<AddSeries>(addSeries => HandleAddSeries(addSeries));
             Receive<RemoveSeries>(removeSeries => HandleRemoveSeries(removeSeries));
             Receive<Metric>(metric => HandleMetrics(metric));
@@ -89,15 +89,26 @@ namespace ChartApp.Actors
             });
         }
 
+
         private void Paused()
         {
+            // while paused, we need to stash AddSeries & RemoveSeries messages
+            Receive<AddSeries>(addSeries => Stash.Stash());
+            Receive<RemoveSeries>(removeSeries => Stash.Stash());
             Receive<Metric>(metric => HandleMetricsPaused(metric));
             Receive<TogglePause>(pause =>
             {
                 SetPauseButtonText(false);
                 Unbecome();
+
+                // ChartingActor is leaving the Paused state, put messages back
+                // into mailbox for processing under new behavior
+                Stash.UnstashAll();
             });
         }
+
+
+        public IStash Stash { get; set; }
 
 
         #region Individual Message Type Handlers
@@ -113,7 +124,7 @@ namespace ChartApp.Actors
         }
 
 
-        private void HandleInitialize(InitializeChart ic)
+        private void HandleInitialize(ChartingActor.InitializeChart ic)
         {
             if (ic.InitialSeries != null)
             {
