@@ -11,6 +11,7 @@ namespace ChartApp
     public partial class Main : Form
     {
         private Dictionary<CounterType, ActorRef> _toggleActors = new Dictionary<CounterType, ActorRef>();
+        private ActorRef _chartActor;
 
 
         public Main()
