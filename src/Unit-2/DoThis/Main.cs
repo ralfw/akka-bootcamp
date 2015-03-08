@@ -10,11 +10,8 @@ namespace ChartApp
 {
     public partial class Main : Form
     {
-        private ActorRef _coordinatorActor;
         private Dictionary<CounterType, ActorRef> _toggleActors = new Dictionary<CounterType, ActorRef>();
 
-        private ActorRef _chartActor;
-        private readonly AtomicCounter _seriesCounter = new AtomicCounter(1);
 
         public Main()
         {
@@ -29,7 +26,7 @@ namespace ChartApp
             _chartActor = Program.ChartActors.ActorOf(Props.Create(() => new ChartingActor(sysChart, btnPauseResume)), "charting");
             _chartActor.Tell(new ChartingActor.InitializeChart(null)); //no initial series
 
-            _coordinatorActor = Program.ChartActors.ActorOf(Props.Create(() =>
+            var _coordinatorActor = Program.ChartActors.ActorOf(Props.Create(() =>
                     new PerformanceCounterCoordinatorActor(_chartActor)), "counters");
 
             // CPU button toggle actor
